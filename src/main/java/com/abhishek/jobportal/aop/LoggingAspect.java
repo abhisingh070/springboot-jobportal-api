@@ -1,0 +1,36 @@
+package com.abhishek.jobportal.aop;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+@Component
+@Aspect
+public class LoggingAspect {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
+
+    // ReturnType  FullClassName.Method-name(Arguments)
+
+    @Before("execution(* com.telusko.spring_boot_rest.service.JobService.getJob(..)) || execution(* com.telusko.spring_boot_rest.service.JobService.updateJob(..))")
+    public void logMethodCalled(JoinPoint jp){
+        LOGGER.info("Log Method Called  "  + jp.getSignature().getName());
+    }
+
+    @After("execution(* com.telusko.spring_boot_rest.service.JobService.getJob(..)) || execution(* com.telusko.spring_boot_rest.service.JobService.updateJob(..))")
+    public void logMethodExecuted(JoinPoint jp){
+        LOGGER.info("Log Method Executed  "  + jp.getSignature().getName());
+    }
+
+    @AfterThrowing("execution(* com.telusko.spring_boot_rest.service.JobService.getJob(..)) || execution(* com.telusko.spring_boot_rest.service.JobService.updateJob(..))")
+    public void logMethodCrash(JoinPoint jp){
+        LOGGER.info("Issue in the method "  + jp.getSignature().getName());
+    }
+
+    @AfterReturning("execution(* com.telusko.spring_boot_rest.service.JobService.getJob(..)) || execution(* com.telusko.spring_boot_rest.service.JobService.updateJob(..))")
+    public void logMethodSuccess(JoinPoint jp){
+        LOGGER.info("Log Method Executed Successfully "  + jp.getSignature().getName());
+    }
+}
